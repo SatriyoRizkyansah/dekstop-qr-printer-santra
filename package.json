@@ -1,0 +1,29 @@
+{
+  "name": "qr-printer-app",
+  "version": "1.0.0",
+  "description": "A desktop application for printing QR codes using multiple printers.",
+  "main": "src/App.tsx",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.4.3"
+  },
+  "devDependencies": {
+    "vite": "^2.5.0",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.2"
+  },
+  "keywords": [
+    "qr",
+    "printer",
+    "tauri",
+    "rust"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

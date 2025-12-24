@@ -1,0 +1,20 @@
+[package]
+name = "qr-printer-app"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tauri = { version = "^1.0", features = ["api-all"] }
+raster = "0.6"  # For image processing if needed for QR codes
+qrcode = "0.12"  # For QR code generation
+printpdf = "0.3"  # For printing capabilities
+
+[build]
+rustflags = ["--cfg", "tauri"]
+
+[package.metadata.tauri]
+bundle = { 
+  identifier = "com.example.qrprinterapp", 
+  name = "QR Printer App", 
+  version = "0.1.0" 
+}
