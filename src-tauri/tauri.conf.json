@@ -1,43 +1,30 @@
 {
-  "tauri": {
-    "package": {
-      "productName": "QR Printer App",
-      "version": "0.1.0",
-      "description": "A desktop application for printing QR codes.",
-      "author": "Your Name",
-      "license": "MIT"
-    },
-    "build": {
-      "distDir": "../dist",
-      "devPath": "http://localhost:3000",
-      "beforeDevCommand": "npm run dev",
-      "beforeBuildCommand": "npm run build"
-    },
-    "tauri": {
-      "bundle": {
-        "active": true,
-        "targets": "all",
-        "identifier": "com.example.qrprinterapp",
-        "icon": [
-          "icons/icon.png"
-        ]
-      },
-      "updater": {
-        "active": false
-      },
-      "allowlist": {
-        "all": true
-      }
-    },
-    "ctx": {
-      "window": {
-        "title": "QR Printer App",
-        "width": 800,
+  "productName": "QR Printer App",
+  "version": "0.1.0",
+  "identifier": "com.example.qrprinterapp",
+  "build": {
+    "beforeDevCommand": "npm run web",
+    "beforeBuildCommand": "npm run web-build",
+    "devUrl": "http://localhost:5173",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "fullscreen": false,
-        "decorations": true
+        "title": "QR Printer App",
+        "width": 800
       }
+    ],
+    "security": {
+      "csp": null
     }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["deb"],
+    "icon": []
   }
 }

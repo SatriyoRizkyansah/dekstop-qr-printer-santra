@@ -1,0 +1,32 @@
+# Rust/Cargo
+target/
+Cargo.lock
+src-tauri/target/
+src-tauri/Cargo.lock
+src-tauri/gen/
+
+# Node
+node_modules/
+package-lock.json
+dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.iml
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Development
+.env
+.env.local
+.env.*.local
