@@ -1,13 +1,11 @@
-import React from 'react';
+import React from "react";
 
 interface PrintPreviewProps {
   data?: string;
 }
 
 const PrintPreview: React.FC<PrintPreviewProps> = ({ data }) => {
-  const qrCodeUrl = data
-    ? `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(data)}&size=300x300`
-    : null;
+  const qrCodeUrl = data ? `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(data)}&size=300x300` : null;
 
   return (
     <div className="preview-card">

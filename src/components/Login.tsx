@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
-import './Login.css';
+import React, { useState } from "react";
+import "./Login.css";
 
 interface LoginProps {
   onLogin: (username: string) => void;
 }
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!username.trim()) {
-      setError('Username is required');
+      setError("Username is required");
       return;
     }
 
     if (!password.trim()) {
-      setError('Password is required');
+      setError("Password is required");
       return;
     }
 
@@ -32,7 +32,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       if (username && password.length >= 3) {
         onLogin(username);
       } else {
-        setError('Invalid credentials');
+        setError("Invalid credentials");
       }
       setIsLoading(false);
     }, 500);
@@ -49,38 +49,18 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              type="text"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              disabled={isLoading}
-              className="form-input"
-            />
+            <input id="username" type="text" placeholder="Enter your username" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading} className="form-input" />
           </div>
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={isLoading}
-              className="form-input"
-            />
+            <input id="password" type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} className="form-input" />
           </div>
 
           {error && <div className="error-message">{error}</div>}
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="login-button"
-          >
-            {isLoading ? 'Logging in...' : 'Login'}
+          <button type="submit" disabled={isLoading} className="login-button">
+            {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
 

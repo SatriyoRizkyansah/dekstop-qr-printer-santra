@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import Login from './components/Login';
-import PrinterSelector from './components/PrinterSelector';
-import QRInput from './components/QRInput';
-import PrintPreview from './components/PrintPreview';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Login from "./components/Login";
+import PrinterSelector from "./components/PrinterSelector";
+import QRInput from "./components/QRInput";
+import PrintPreview from "./components/PrintPreview";
+import "./App.css";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
-  const [selectedPrinter, setSelectedPrinter] = useState<string>('');
-  const [qrData, setQrData] = useState('');
-  const [qrCode, setQrCode] = useState<string>('');
+  const [username, setUsername] = useState("");
+  const [selectedPrinter, setSelectedPrinter] = useState<string>("");
+  const [qrData, setQrData] = useState("");
+  const [qrCode, setQrCode] = useState<string>("");
 
   useEffect(() => {
     // Logic to fetch available printers and set the default printer
@@ -23,10 +23,10 @@ const App = () => {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setUsername('');
-    setSelectedPrinter('');
-    setQrData('');
-    setQrCode('');
+    setUsername("");
+    setSelectedPrinter("");
+    setQrData("");
+    setQrCode("");
   };
 
   const handlePrint = () => {
@@ -59,7 +59,12 @@ const App = () => {
           <div className="app-layout">
             <div className="form-section">
               <h3>QR Code Details</h3>
-              <QRInput onGenerate={(data) => { setQrData(data); setQrCode(data); }} />
+              <QRInput
+                onGenerate={(data) => {
+                  setQrData(data);
+                  setQrCode(data);
+                }}
+              />
               <PrinterSelector onPrinterSelect={setSelectedPrinter} />
               <button className="print-button" onClick={handlePrint}>
                 Print QR Code

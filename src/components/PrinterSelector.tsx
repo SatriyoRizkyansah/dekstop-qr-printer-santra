@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 interface PrinterSelectorProps {
   onPrinterSelect: (printer: string) => void;
 }
 
 const PrinterSelector: React.FC<PrinterSelectorProps> = ({ onPrinterSelect }) => {
-  const [printers, setPrinters] = useState<string[]>([
-    'HP LaserJet Pro',
-    'Canon Pixma',
-    'Epson EcoTank',
-    'Default Printer'
-  ]);
-  const [selectedPrinter, setSelectedPrinter] = useState('');
+  const [printers, setPrinters] = useState<string[]>(["HP LaserJet Pro", "Canon Pixma", "Epson EcoTank", "Default Printer"]);
+  const [selectedPrinter, setSelectedPrinter] = useState("");
 
   useEffect(() => {
     if (printers.length > 0) {
@@ -29,12 +24,7 @@ const PrinterSelector: React.FC<PrinterSelectorProps> = ({ onPrinterSelect }) =>
   return (
     <div className="form-group">
       <label htmlFor="printer-select">Select Printer</label>
-      <select
-        id="printer-select"
-        className="form-select"
-        value={selectedPrinter}
-        onChange={handlePrinterChange}
-      >
+      <select id="printer-select" className="form-select" value={selectedPrinter} onChange={handlePrinterChange}>
         <option value="">-- Choose a printer --</option>
         {printers.map((printer) => (
           <option key={printer} value={printer}>

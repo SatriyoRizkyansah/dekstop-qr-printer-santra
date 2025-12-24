@@ -1,9 +1,11 @@
 # QR Code Printer Application
 
 ## Overview
+
 This is a desktop application built with **Tauri**, **React**, and **Rust** that allows users to generate and print QR codes. The application features a modern login system and an intuitive dashboard for managing multiple printers.
 
 ## Features
+
 ✨ **Modern Login UI** - Clean, gradient-based login interface
 📱 **Responsive Design** - Works seamlessly on different screen sizes
 🖨️ **Printer Selection** - Choose from available printers
@@ -12,12 +14,14 @@ This is a desktop application built with **Tauri**, **React**, and **Rust** that
 🚀 **Desktop Application** - Full Tauri-powered desktop app
 
 ## Tech Stack
+
 - **Frontend**: React 17 + TypeScript + Vite
 - **Backend**: Rust + Tauri 2.x
 - **Styling**: Modern CSS with gradients
 - **Build Tool**: Vite + Cargo
 
 ## Project Structure
+
 ```
 qr-printer-app
 ├── src/
@@ -48,6 +52,7 @@ qr-printer-app
 ## Getting Started
 
 ### Prerequisites
+
 - **Rust** (1.70+) - [Install Rust](https://rustup.rs/)
 - **Node.js** (16+) - [Install Node.js](https://nodejs.org/)
 - **System Libraries** (Linux only):
@@ -56,6 +61,7 @@ qr-printer-app
   ```
 
 ### Installation
+
 1. Clone the repository
 2. Install dependencies:
    ```bash
@@ -63,7 +69,9 @@ qr-printer-app
    ```
 
 ### Running the Application
+
 Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -71,7 +79,9 @@ npm run dev
 This will compile the Rust backend and start the React frontend on a local dev server.
 
 ### Building for Production
+
 Build the desktop application:
+
 ```bash
 npm run build
 ```
@@ -79,13 +89,16 @@ npm run build
 The compiled application will be available in `src-tauri/target/release/`
 
 ### Installation
+
 1. Clone the repository:
+
    ```
    git clone <repository-url>
    cd qr-printer-app
    ```
 
 2. Navigate to the `src-tauri` directory and build the Rust backend:
+
    ```
    cd src-tauri
    cargo build
@@ -98,19 +111,24 @@ The compiled application will be available in `src-tauri/target/release/`
    ```
 
 ### Running the Application
+
 To run the application in development mode, execute the following command in the root directory:
+
 ```
 npm run tauri dev
 ```
 
 ### Usage
+
 1. Enter the data you want to encode in the QR code using the input field.
 2. Select a printer from the dropdown list of detected printers.
 3. Preview the generated QR code.
 4. Click the print button to send the QR code to the selected printer.
 
 ## Contributing
+
 Contributions are welcome! Please feel free to submit a pull request or open an issue for any enhancements or bug fixes.
 
 ## License
+
 This project is licensed under the MIT License. See the LICENSE file for details.# dekstop-qr-printer
