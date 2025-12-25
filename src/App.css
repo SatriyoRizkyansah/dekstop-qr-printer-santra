@@ -1,58 +1,106 @@
 .app-container {
-  display: flex;
-  height: 100vh;
-  background-color: #f5f5f5;
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
 }
 
-.app-main {
-  flex: 1;
+.app-with-header {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
 .app-header {
   background: white;
-  border-bottom: 1px solid #eee;
-  padding: 20px 30px;
+  padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.header-left {
+  flex: 0 0 auto;
 }
 
 .app-header h1 {
-  font-size: 24px;
-  color: #333;
+  font-size: 20px;
+  color: #1f2937;
   margin: 0;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: -0.3px;
 }
 
-.user-info {
+.app-nav {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+
+.nav-btn {
+  padding: 8px 16px;
+  background: transparent;
+  color: #6b7280;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #3b82f6;
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+}
+
+.nav-btn.active {
+  color: white;
+  background: #3b82f6;
+  border-color: transparent;
+}
+
+.header-right {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
+  flex: 0 0 auto;
 }
 
 .user-name {
   font-size: 14px;
-  color: #666;
+  color: #1f2937;
   font-weight: 500;
+  padding: 6px 12px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  min-width: 100px;
+  text-align: center;
 }
 
 .logout-button {
   padding: 8px 16px;
-  background-color: #ff6b6b;
+  background: #ef4444;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s ease;
+}
 }
 
 .logout-button:hover {
-  background-color: #ff5252;
+  background: #dc2626;
+}
+
+.logout-button:active {
+  background: #b91c1c;
 }
 
 .app-content {

@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Login from "./components/Login";
-import PrinterSelector from "./components/PrinterSelector";
-import QRInput from "./components/QRInput";
-import PrintPreview from "./components/PrintPreview";
+import Dashboard from "./components/Dashboard";
+import QueueService from "./components/QueueService";
 import "./App.css";
+
+type PageType = "login" | "dashboard" | "queue";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
-  const [selectedPrinter, setSelectedPrinter] = useState<string>("");
-  const [qrData, setQrData] = useState("");
-  const [qrCode, setQrCode] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<PageType>("login");
 
   useEffect(() => {
     // Logic to fetch available printers and set the default printer
@@ -19,64 +18,52 @@ const App = () => {
   const handleLogin = (user: string) => {
     setUsername(user);
     setIsLoggedIn(true);
+    setCurrentPage("dashboard");
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUsername("");
-    setSelectedPrinter("");
-    setQrData("");
-    setQrCode("");
+    setCurrentPage("login");
   };
 
-  const handlePrint = () => {
-    if (selectedPrinter && qrCode) {
-      // Logic to send the QR code to the selected printer
-      alert(`Printing QR code to ${selectedPrinter}`);
-    }
+  const goToDashboard = () => {
+    setCurrentPage("dashboard");
+  };
+
+  const goToQueueService = () => {
+    setCurrentPage("queue");
   };
 
   if (!isLoggedIn) {
     return <Login onLogin={handleLogin} />;
   }
 
+  const pageComponent = currentPage === "dashboard" ? <Dashboard username={username} /> : <QueueService />;
+
   return (
     <div className="app-container">
-      <div className="app-main">
+      <div className="app-with-header">
         <header className="app-header">
-          <h1>QR Code Printer</h1>
-          <div className="user-info">
-            <span className="user-name">Welcome, {username}!</span>
+          <div className="header-left">
+            <h1>🖨️ QR Printer App</h1>
+          </div>
+          <nav className="app-nav">
+            <button className={`nav-btn ${currentPage === "dashboard" ? "active" : ""}`} onClick={goToDashboard}>
+              📊 Dashboard
+            </button>
+            <button className={`nav-btn ${currentPage === "queue" ? "active" : ""}`} onClick={goToQueueService}>
+              🎫 Queue Service
+            </button>
+          </nav>
+          <div className="header-right">
+            <span className="user-name">{username}</span>
             <button className="logout-button" onClick={handleLogout}>
-              Logout
+              🚪 Logout
             </button>
           </div>
         </header>
-
-        <main className="app-content">
-          <h2 className="page-title">Generate & Print QR Codes</h2>
-
-          <div className="app-layout">
-            <div className="form-section">
-              <h3>QR Code Details</h3>
-              <QRInput
-                onGenerate={(data) => {
-                  setQrData(data);
-                  setQrCode(data);
-                }}
-              />
-              <PrinterSelector onPrinterSelect={setSelectedPrinter} />
-              <button className="print-button" onClick={handlePrint}>
-                Print QR Code
-              </button>
-            </div>
-
-            <div className="preview-section">
-              <h3>Preview</h3>
-              <PrintPreview data={qrCode} />
-            </div>
-          </div>
-        </main>
+        {pageComponent}
       </div>
     </div>
   );

@@ -2,18 +2,36 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  --color-blue-500: #3d84a7;
+  --color-blue-600: #47466d;
+  --color-green-500: #46cdcf;
+  --color-green-600: #3d84a7;
+  --color-red-500: #47466d;
+  --color-red-600: #3d84a7;
+  --color-yellow-500: #abeed8;
+  --color-yellow-600: #46cdcf;
+  --color-purple-500: #47466d;
+  --color-purple-600: #3d84a7;
+  --color-orange-500: #46cdcf;
+  --color-orange-600: #3d84a7;
+  --color-teal-500: #3d84a7;
+  --color-teal-600: #47466d;
 }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f5f5;
+  background: linear-gradient(135deg, var(--color-blue-600) 0%, var(--color-purple-500) 100%);
 }
 
+html,
+body,
 #root {
   width: 100%;
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .app-container {
