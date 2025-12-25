@@ -4,6 +4,9 @@ use serde::{Deserialize, Serialize};
 use std::io;
 use std::process::Command;
 
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Printer {
     pub name: String,
@@ -24,6 +27,7 @@ pub fn list_connected_printers() -> io::Result<Vec<Printer>> {
                 "-Command",
                 "Get-Printer | Select-Object Name,DriverName,PortName,PrinterStatus | ConvertTo-Json"
             ])
+            .creation_flags(0x08000000) // CREATE_NO_WINDOW flag
             .output()?;
 
         if output.status.success() {
@@ -154,7 +158,8 @@ pub fn check_printer_status(printer_name: &str) -> io::Result<String> {
             .args(&[
                 "-Command",
                 &format!("(Get-Printer -Name '{}').PrinterStatus", printer_name)
-            ])
+            ]creation_flags(0x08000000) // CREATE_NO_WINDOW flag
+            .)
             .output()?;
 
         if output.status.success() {
