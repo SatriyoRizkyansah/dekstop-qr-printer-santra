@@ -142,6 +142,91 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       {printMessage && <div className="print-notification">{printMessage}</div>}
 
       <div className="login-wrapper">
+        {/* Left Panel - Login Form */}
+        <div className="login-panel">
+          <div className="login-content">
+            <div className="user-avatar">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#5B8DEF" strokeWidth="2">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+
+            <h1 className="welcome-title">Selamat Datang</h1>
+            <p className="welcome-subtitle">Masuk untuk mengakses sistem cetak QR Code wisuda</p>
+
+            <form onSubmit={handleSubmit} className="login-form">
+              <div className="form-group">
+                <label htmlFor="username">Username</label>
+                <div className="input-wrapper">
+                  <svg className="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                  <input id="username" type="text" placeholder="Masukkan username" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading} />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <div className="input-wrapper">
+                  <svg className="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0110 0v4" />
+                  </svg>
+                  <input id="password" type="password" placeholder="Masukkan password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
+                </div>
+              </div>
+
+              {error && (
+                <div className="error-message">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="15" y1="9" x2="9" y2="15" />
+                    <line x1="9" y1="9" x2="15" y2="15" />
+                  </svg>
+                  {error}
+                </div>
+              )}
+
+              <button type="submit" disabled={isLoading || !selectedPrinter} className="login-button">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M13.8 12H3" />
+                </svg>
+                {isLoading ? "Masuk..." : "Masuk"}
+              </button>
+            </form>
+
+            <div className="login-help">
+              <h4>Petunjuk Login:</h4>
+              <ul>
+                <li>• Pastikan printer thermal sudah terhubung dan dikonfigurasi</li>
+                <li>• Gunakan kredensial wisuda.unpam.ac.id</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="status-bar">
+            <div className="status-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4caf50" strokeWidth="2">
+                <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z" />
+              </svg>
+              <span className="status-label">Printer:</span>
+              <span className="status-value">{selectedPrinter || "Belum dipilih"}</span>
+            </div>
+            <div className="status-divider"></div>
+            <div className="status-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2196F3" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 6v6l4 2" />
+              </svg>
+              <span className="status-label">Status:</span>
+              <span className="status-value">{selectedPrinter ? "Siap Login" : "Pilih Printer"}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Panel - Printer Configuration */}
         <div className="printer-config-panel">
           <div className="panel-header">
             <svg className="header-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -293,89 +378,6 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             ) : (
               <p className="no-printer-selected">Belum ada printer yang dipilih</p>
             )}
-          </div>
-        </div>
-
-        <div className="login-panel">
-          <div className="login-content">
-            <div className="user-avatar">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#5B8DEF" strokeWidth="2">
-                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            </div>
-
-            <h1 className="welcome-title">Selamat Datang</h1>
-            <p className="welcome-subtitle">Masuk untuk mengakses sistem cetak QR Code wisuda</p>
-
-            <form onSubmit={handleSubmit} className="login-form">
-              <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <div className="input-wrapper">
-                  <svg className="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                  <input id="username" type="text" placeholder="Masukkan username" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading} />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <div className="input-wrapper">
-                  <svg className="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                    <path d="M7 11V7a5 5 0 0110 0v4" />
-                  </svg>
-                  <input id="password" type="password" placeholder="Masukkan password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
-                </div>
-              </div>
-
-              {error && (
-                <div className="error-message">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="15" y1="9" x2="9" y2="15" />
-                    <line x1="9" y1="9" x2="15" y2="15" />
-                  </svg>
-                  {error}
-                </div>
-              )}
-
-              <button type="submit" disabled={isLoading || !selectedPrinter} className="login-button">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M13.8 12H3" />
-                </svg>
-                {isLoading ? "Masuk..." : "Masuk"}
-              </button>
-            </form>
-
-            <div className="login-help">
-              <h4>Petunjuk Login:</h4>
-              <ul>
-                <li>• Pastikan printer thermal sudah terhubung dan dikonfigurasi</li>
-                <li>• Gunakan kredensial wisuda.unpam.ac.id</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="status-bar">
-            <div className="status-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4caf50" strokeWidth="2">
-                <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z" />
-              </svg>
-              <span className="status-label">Printer:</span>
-              <span className="status-value">{selectedPrinter || "Belum dipilih"}</span>
-            </div>
-            <div className="status-divider"></div>
-            <div className="status-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2196F3" strokeWidth="2">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 6v6l4 2" />
-              </svg>
-              <span className="status-label">Status:</span>
-              <span className="status-value">{selectedPrinter ? "Siap Login" : "Pilih Printer"}</span>
-            </div>
           </div>
         </div>
       </div>

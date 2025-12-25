@@ -480,6 +480,53 @@ section h2 {
   font-size: 14px;
   color: #333;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.thermal-badge,
+.default-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.thermal-badge {
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+  color: white;
+  box-shadow: 0 2px 4px rgba(255, 107, 53, 0.2);
+}
+
+.default-badge {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #333;
+  box-shadow: 0 2px 4px rgba(255, 215, 0, 0.2);
+}
+
+.printer-option.thermal {
+  border-left: 4px solid #ff6b35;
+}
+
+.loading-state,
+.empty-state-small {
+  text-align: center;
+  padding: 24px;
+  color: #666;
+  font-size: 14px;
+}
+
+.modal-info {
+  font-size: 13px;
+  color: #666;
+  margin: 8px 0 16px 0;
+  padding: 10px;
+  background: #f0f9ff;
+  border-left: 3px solid #3b82f6;
+  border-radius: 4px;
 }
 
 .printer-option:has(input[type="radio"]:checked) {

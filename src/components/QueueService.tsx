@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Printer, Users, Calendar, Clock, CheckCircle, AlertTriangle, QrCode, FileText, User, Baby, Smile, UserCheck } from "lucide-react";
+import { invoke } from "@tauri-apps/api/core";
 import "./QueueService.css";
 
 interface QueueData {
@@ -12,24 +13,22 @@ interface QueueData {
 }
 
 interface PrinterOption {
-  id: string;
   name: string;
+  is_default: boolean;
+  is_thermal: boolean;
 }
 
-const QueueService: React.FC = () => {
+interface QueueServiceProps {
+  defaultPrinter?: string;
+}
+
+const QueueService: React.FC<QueueServiceProps> = ({ defaultPrinter }) => {
   const [myTickets, setMyTickets] = useState<QueueData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [showPrinterModal, setShowPrinterModal] = useState(false);
-  const [selectedTicketIndex, setSelectedTicketIndex] = useState<number | null>(null);
   const [selectedPrinter, setSelectedPrinter] = useState<string>("");
-
-  const printers: PrinterOption[] = [
-    { id: "1", name: "Printer A (Meja 1)" },
-    { id: "2", name: "Printer B (Meja 2)" },
-    { id: "3", name: "Printer C (Lobi)" },
-    { id: "4", name: "Printer D (Farmasi)" },
-  ];
+  const [printers, setPrinters] = useState<PrinterOption[]>([]);
+  const [loadingPrinters, setLoadingPrinters] = useState(true);
 
   const categories = [
     { id: "A", name: "Pemeriksaan Umum", icon: User, color: "#3D84A7" },
@@ -38,12 +37,42 @@ const QueueService: React.FC = () => {
     { id: "D", name: "Keluarga Berencana (KB)", icon: Users, color: "#ABEED8" },
   ];
 
-  const takeQueue = async (categoryId: string) => {
-    setIsLoading(true);
-    setMessage("");
+  // Load printers on mount
+  useEffect(() => {
+    loadPrinters();
+  }, []);
 
-    // Simulate API call
-    setTimeout(() => {
+  // Set default printer if provided
+  useEffect(() => {
+    if (defaultPrinter && printers.length > 0) {
+      setSelectedPrinter(defaultPrinter);
+    }
+  }, [defaultPrinter, printers]);
+
+  const loadPrinters = async () => {
+    try {
+      setLoadingPrinters(true);
+      const result = await invoke<PrinterOption[]>("list_printers");
+      setPrinters(result);
+      setLoadingPrinters(false);
+    } catch (error) {
+      console.error("Failed to load printers:", error);
+      setMessage("Gagal memuat daftar printer");
+      setLoadingPrinters(false);
+    }
+  };
+
+  const takeQueue = async (categoryId: string) => {
+    if (!selectedPrinter) {
+      setMessage("⚠️ Pilih printer terlebih dahulu di pengaturan");
+      return;
+    }
+
+    setIsLoading(true);
+    setMessage("Sedang membuat antrian...");
+
+    // Simulate API call to create ticket
+    setTimeout(async () => {
       const category = categories.find((c) => c.id === categoryId);
       if (category) {
         const ticketNumber = Math.floor(Math.random() * 900) + 100;
@@ -58,36 +87,55 @@ const QueueService: React.FC = () => {
         };
 
         setMyTickets([...myTickets, newTicket]);
-        setMessage(`Antrian berhasil diambil! Nomor antrian: ${qrData}`);
+        setMessage(`Antrian berhasil dibuat! Nomor: ${qrData}. Sedang mencetak...`);
+
+        // Auto print
+        try {
+          await invoke("print_ticket", {
+            printerName: selectedPrinter,
+            ticketData: {
+              ticket_number: qrData,
+              service_name: category.name,
+              queue_number: ticketNumber,
+              timestamp: new Date().toISOString(),
+              qr_data: qrData,
+            },
+          });
+          setMessage(`✅ Tiket ${qrData} berhasil dicetak ke ${selectedPrinter}!`);
+        } catch (error) {
+          console.error("Print error:", error);
+          setMessage(`⚠️ Tiket ${qrData} dibuat tapi gagal dicetak: ${error}`);
+        }
       }
       setIsLoading(false);
     }, 800);
   };
 
-  const openPrinterModal = (index: number) => {
-    setSelectedTicketIndex(index);
-    setShowPrinterModal(true);
-    setSelectedPrinter("");
-  };
-
-  const handlePrint = async () => {
-    if (!selectedPrinter || selectedTicketIndex === null) {
-      setMessage("Pilih printer terlebih dahulu");
+  const reprintTicket = async (index: number) => {
+    const ticket = myTickets[index];
+    if (!selectedPrinter) {
+      setMessage("⚠️ Pilih printer default terlebih dahulu");
       return;
     }
 
-    const ticket = myTickets[selectedTicketIndex];
-    const printerName = printers.find((p) => p.id === selectedPrinter)?.name || "Unknown Printer";
+    setMessage(`Sedang mencetak ulang ${ticket.category}${ticket.ticketNumber}...`);
 
-    setMessage(`Sedang mencetak ke ${printerName}...`);
-
-    // Simulate print
-    setTimeout(() => {
-      setMessage(`Berhasil dicetak! Tiket ${ticket.category}${ticket.ticketNumber} dicetak ke ${printerName}`);
-      setShowPrinterModal(false);
-      setSelectedTicketIndex(null);
-      setSelectedPrinter("");
-    }, 1500);
+    try {
+      await invoke("print_ticket", {
+        printerName: selectedPrinter,
+        ticketData: {
+          ticket_number: `${ticket.category}${ticket.ticketNumber}`,
+          service_name: ticket.categoryName,
+          queue_number: ticket.ticketNumber,
+          timestamp: new Date().toISOString(),
+          qr_data: ticket.qrData || `${ticket.category}${ticket.ticketNumber}`,
+        },
+      });
+      setMessage(`✅ Tiket ${ticket.category}${ticket.ticketNumber} berhasil dicetak ulang!`);
+    } catch (error) {
+      console.error("Reprint error:", error);
+      setMessage(`❌ Gagal mencetak ulang: ${error}`);
+    }
   };
 
   const cancelTicket = (index: number) => {
@@ -168,7 +216,7 @@ const QueueService: React.FC = () => {
                     </div>
                   </div>
                   <div className="ticket-actions">
-                    <button className="print-ticket-btn" onClick={() => openPrinterModal(index)} title="Cetak tiket">
+                    <button className="print-ticket-btn" onClick={() => reprintTicket(index)} title="Cetak ulang tiket">
                       <Printer size={16} />
                     </button>
                     <button className="cancel-btn" onClick={() => cancelTicket(index)} title="Batalkan antrian">
@@ -192,47 +240,6 @@ const QueueService: React.FC = () => {
           </div>
         )}
       </div>
-
-      {/* Printer Selection Modal */}
-      {showPrinterModal && selectedTicketIndex !== null && (
-        <div className="modal-overlay" onClick={() => setShowPrinterModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Pilih Printer</h3>
-              <button className="modal-close" onClick={() => setShowPrinterModal(false)}>
-                ✕
-              </button>
-            </div>
-
-            <div className="modal-body">
-              <p className="modal-subtitle">
-                Tiket:{" "}
-                <strong>
-                  {myTickets[selectedTicketIndex].category}
-                  {myTickets[selectedTicketIndex].ticketNumber}
-                </strong>
-              </p>
-              <div className="printer-list">
-                {printers.map((printer) => (
-                  <label key={printer.id} className="printer-option">
-                    <input type="radio" name="printer" value={printer.id} checked={selectedPrinter === printer.id} onChange={(e) => setSelectedPrinter(e.target.value)} />
-                    <span className="printer-name">{printer.name}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div className="modal-footer">
-              <button className="btn-cancel" onClick={() => setShowPrinterModal(false)}>
-                Batal
-              </button>
-              <button className="btn-print" onClick={handlePrint} disabled={!selectedPrinter}>
-                🖨️ Cetak Sekarang
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
