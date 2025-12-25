@@ -1,134 +1,463 @@
-.login-container {
+/* Login Wrapper - 2 Panel Layout */
+.login-wrapper {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  margin: 0;
-  padding: 0;
+  height: 100vh;
+  background: #f5f5f5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
 }
 
-.login-card {
+/* Left Panel - Printer Configuration */
+.printer-config-panel {
+  flex: 1;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  padding: 40px;
-  width: 100%;
-  max-width: 400px;
-  animation: slideUp 0.4s ease-out;
+  border-right: 1px solid #e0e0e0;
+  overflow-y: auto;
+  padding: 30px;
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.login-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.login-header h1 {
-  margin: 0;
-  color: #333;
-  font-size: 28px;
-  font-weight: 700;
-}
-
-.subtitle {
-  margin: 8px 0 0 0;
-  color: #999;
-  font-size: 14px;
-  font-weight: 400;
-}
-
-.login-form {
+.panel-header {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.header-icon {
+  color: #5B8DEF;
 }
 
-.form-group label {
-  font-size: 14px;
+.panel-header h2 {
+  font-size: 20px;
   font-weight: 600;
   color: #333;
+  margin: 0;
 }
 
-.form-input {
-  padding: 12px 16px;
+.panel-subtitle {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* Printer Selection Section */
+.printer-selection-section {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.section-icon {
+  color: #5B8DEF;
+}
+
+.status-badge {
+  margin-left: auto;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.connected {
+  background: #e8f5e9;
+  color: #4caf50;
+}
+
+/* Printer Dropdown */
+.printer-dropdown-section label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.printer-select-wrapper {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.printer-select {
+  width: 100%;
+  padding: 10px 40px 10px 12px;
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 14px;
-  font-family: inherit;
-  transition: all 0.3s ease;
-  background-color: #fafafa;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.form-input:focus {
+.printer-select:hover {
+  border-color: #5B8DEF;
+}
+
+.printer-select:focus {
   outline: none;
-  border-color: #667eea;
-  background-color: white;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #5B8DEF;
+  box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.1);
 }
 
-.form-input:disabled {
-  background-color: #f5f5f5;
+.printer-select:disabled {
+  background: #f5f5f5;
   cursor: not-allowed;
-  opacity: 0.7;
 }
 
-.error-message {
-  padding: 12px;
-  background-color: #fee;
-  border: 1px solid #fcc;
+.clear-selection {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #e0e0e0;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.clear-selection:hover {
+  background: #d0d0d0;
+  color: #333;
+}
+
+/* Printer Actions */
+.printer-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background: white;
   border-radius: 6px;
-  color: #c33;
   font-size: 13px;
-  animation: shake 0.3s ease-in-out;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #333;
 }
 
-@keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-5px);
-  }
-  75% {
-    transform: translateX(5px);
-  }
+.action-btn:hover:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #5B8DEF;
 }
 
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Selected Printer Info */
+.selected-printer-info {
+  margin-top: 16px;
+}
+
+.printer-card {
+  display: flex;
+  gap: 12px;
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.printer-icon-wrapper {
+  flex-shrink: 0;
+}
+
+.printer-details {
+  flex: 1;
+}
+
+.printer-name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.printer-meta {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 2px;
+}
+
+.printer-warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  color: #ff9800;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Printer Stats */
+.printer-stats {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.stat-box {
+  flex: 1;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stat-box.thermal {
+  background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+}
+
+.stat-box.regular {
+  background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* Warning Box */
+.warning-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #856404;
+}
+
+.warning-box svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Printer Info Section */
+.printer-info-section {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.printer-info-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: #333;
+}
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 500;
+  color: #666;
+  font-size: 14px;
+}
+
+.info-value {
+  font-weight: 400;
+  color: #333;
+  font-size: 14px;
+}
+
+.no-printer-selected {
+  color: #999;
+  font-style: italic;
+  font-size: 14px;
+}
+
+/* Right Panel - Login Form */
+.login-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  position: relative;
+}
+
+.login-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.user-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.welcome-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+  text-align: center;
+}
+
+.welcome-subtitle {
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+/* Login Form */
+.login-form {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 12px 12px 12px 42px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.input-wrapper input:focus {
+  outline: none;
+  border-color: #5B8DEF;
+  box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.1);
+}
+
+.input-wrapper input:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.input-wrapper input::placeholder {
+  color: #999;
+}
+
+/* Error Message */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffebee;
+  border: 1px solid #f44336;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+/* Login Button */
 .login-button {
-  padding: 12px 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #5B8DEF 0%, #4A7BD8 100%);
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 10px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
 }
 
 .login-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #4A7BD8 0%, #3A6BC7 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(91, 141, 239, 0.3);
 }
 
 .login-button:active:not(:disabled) {
@@ -136,19 +465,83 @@
 }
 
 .login-button:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-.login-footer {
-  text-align: center;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+/* Login Help */
+.login-help {
+  margin-top: 32px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  width: 100%;
 }
 
-.demo-text {
+.login-help h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.login-help ul {
   margin: 0;
-  color: #999;
-  font-size: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.login-help li {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+/* Status Bar */
+.status-bar {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  background: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  font-size: 13px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.status-value {
+  color: #333;
+  font-weight: 600;
+}
+
+.status-divider {
+  width: 1px;
+  height: 20px;
+  background: #ddd;
+  margin: 0 16px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .login-wrapper {
+    flex-direction: column;
+  }
+
+  .printer-config-panel {
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .status-bar {
+    flex-wrap: wrap;
+  }
 }

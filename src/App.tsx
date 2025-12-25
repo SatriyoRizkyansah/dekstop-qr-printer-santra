@@ -16,7 +16,7 @@ const App = () => {
     // Logic to fetch available printers and set the default printer
   }, []);
 
-  const handleLogin = (user: string) => {
+  const handleLogin = (user: string, printer: string) => {
     setUsername(user);
     setIsLoggedIn(true);
     setCurrentPage("dashboard");
