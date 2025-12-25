@@ -62,10 +62,10 @@ const App = () => {
           <div className="header-left-section">
             <div className="app-logo">
               <div className="logo-icon">
-                <QrCode size={24} strokeWidth={2.5} />
+                <img src="/santra-logo.svg" alt="Santra QR Logo" className="logo-image" />
               </div>
-              <div className="logo-text">
-                <h1>QR Printer System</h1>
+              <div className="logo-text-group">
+                <h1>Santra QR</h1>
                 <p>Sistem Antrian Otomatis</p>
               </div>
             </div>

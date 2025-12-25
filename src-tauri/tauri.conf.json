@@ -1,7 +1,7 @@
 {
-  "productName": "QR Printer App",
+  "productName": "Santra QR",
   "version": "0.1.0",
-  "identifier": "com.example.qrprinterapp",
+  "identifier": "com.santra.qrapp",
   "build": {
     "beforeDevCommand": "npm run web",
     "beforeBuildCommand": "npm run web-build",
@@ -14,7 +14,7 @@
         "fullscreen": false,
         "height": 1000,
         "resizable": true,
-        "title": "QR Printer App",
+        "title": "Santra QR - Sistem Antrian Otomatis",
         "width": 1600,
         "minHeight": 800,
         "minWidth": 1200,
@@ -31,6 +31,6 @@
   "bundle": {
     "active": true,
     "targets": ["deb"],
-    "icon": []
+    "icon": ["icons/icon-256x256.png", "icons/icon-128x128.png", "icons/icon-64x64.png", "icons/icon-32x32.png", "icons/icon.ico"]
   }
 }
