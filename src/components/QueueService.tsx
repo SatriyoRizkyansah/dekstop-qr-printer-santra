@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Printer, Users, Calendar, Clock, CheckCircle, AlertTriangle, QrCode, FileText, User, Baby, Smile, UserCheck } from "lucide-react";
 import "./QueueService.css";
 
 interface QueueData {
@@ -24,17 +25,17 @@ const QueueService: React.FC = () => {
   const [selectedPrinter, setSelectedPrinter] = useState<string>("");
 
   const printers: PrinterOption[] = [
-    { id: "1", name: "🖨️ Printer A (Meja 1)" },
-    { id: "2", name: "🖨️ Printer B (Meja 2)" },
-    { id: "3", name: "🖨️ Printer C (Lobi)" },
-    { id: "4", name: "🖨️ Printer D (Farmasi)" },
+    { id: "1", name: "Printer A (Meja 1)" },
+    { id: "2", name: "Printer B (Meja 2)" },
+    { id: "3", name: "Printer C (Lobi)" },
+    { id: "4", name: "Printer D (Farmasi)" },
   ];
 
   const categories = [
-    { id: "A", name: "Pemeriksaan Umum", icon: "🏥", color: "#3D84A7" },
-    { id: "B", name: "Kesehatan Ibu dan Anak", icon: "👶", color: "#46CDCF" },
-    { id: "C", name: "Kesehatan Gigi dan Mulut", icon: "😁", color: "#47466D" },
-    { id: "D", name: "Keluarga Berencana (KB)", icon: "👨‍👩‍👧", color: "#ABEED8" },
+    { id: "A", name: "Pemeriksaan Umum", icon: User, color: "#3D84A7" },
+    { id: "B", name: "Kesehatan Ibu dan Anak", icon: Baby, color: "#46CDCF" },
+    { id: "C", name: "Kesehatan Gigi dan Mulut", icon: Smile, color: "#47466D" },
+    { id: "D", name: "Keluarga Berencana (KB)", icon: Users, color: "#ABEED8" },
   ];
 
   const takeQueue = async (categoryId: string) => {
@@ -57,7 +58,7 @@ const QueueService: React.FC = () => {
         };
 
         setMyTickets([...myTickets, newTicket]);
-        setMessage(`✅ Antrian berhasil diambil! Nomor antrian: ${qrData}`);
+        setMessage(`Antrian berhasil diambil! Nomor antrian: ${qrData}`);
       }
       setIsLoading(false);
     }, 800);
@@ -71,18 +72,18 @@ const QueueService: React.FC = () => {
 
   const handlePrint = async () => {
     if (!selectedPrinter || selectedTicketIndex === null) {
-      setMessage("⚠️ Pilih printer terlebih dahulu");
+      setMessage("Pilih printer terlebih dahulu");
       return;
     }
 
     const ticket = myTickets[selectedTicketIndex];
     const printerName = printers.find((p) => p.id === selectedPrinter)?.name || "Unknown Printer";
 
-    setMessage(`🖨️ Sedang mencetak ke ${printerName}...`);
+    setMessage(`Sedang mencetak ke ${printerName}...`);
 
     // Simulate print
     setTimeout(() => {
-      setMessage(`✅ Berhasil dicetak! Tiket ${ticket.category}${ticket.ticketNumber} dicetak ke ${printerName}`);
+      setMessage(`Berhasil dicetak! Tiket ${ticket.category}${ticket.ticketNumber} dicetak ke ${printerName}`);
       setShowPrinterModal(false);
       setSelectedTicketIndex(null);
       setSelectedPrinter("");
@@ -92,44 +93,64 @@ const QueueService: React.FC = () => {
   const cancelTicket = (index: number) => {
     const canceled = myTickets[index];
     setMyTickets(myTickets.filter((_, i) => i !== index));
-    setMessage(`❌ Antrian ${canceled.category}${canceled.ticketNumber} dibatalkan`);
+    setMessage(`Antrian ${canceled.category}${canceled.ticketNumber} dibatalkan`);
   };
 
   return (
     <div className="queue-service-container">
       <div className="queue-header">
         <h1>Sistem Antrian Otomatis</h1>
-        <p className="user-greeting">Ambil Antrian Kesehatan 🏥</p>
+        <p className="user-greeting">Ambil Antrian Kesehatan</p>
       </div>
 
-      {message && <div className={`message ${message.includes("✅") ? "success" : message.includes("🖨️") ? "loading" : "info"}`}>{message}</div>}
+      {message && (
+        <div className={`message ${message.includes("berhasil") || message.includes("Berhasil") ? "success" : message.includes("Sedang") ? "loading" : "info"}`}>
+          <div className="message-icon">{message.includes("berhasil") || message.includes("Berhasil") ? <CheckCircle size={16} /> : message.includes("Sedang") ? <Printer size={16} /> : <AlertTriangle size={16} />}</div>
+          {message}
+        </div>
+      )}
 
       <div className="queue-content">
         {/* Take Queue Section */}
         <section className="take-queue-section">
-          <h2>Ambil Antrian</h2>
+          <h2>
+            <Users size={20} /> Ambil Antrian
+          </h2>
           <p className="section-subtitle">Pilih layanan yang ingin Anda gunakan</p>
 
           <div className="categories-grid">
-            {categories.map((category) => (
-              <div key={category.id} className="category-card" style={{ borderTopColor: category.color }}>
-                <div className="category-icon" style={{ backgroundColor: category.color }}>
-                  <span className="icon-text">{category.icon}</span>
+            {categories.map((category) => {
+              const IconComponent = category.icon;
+              return (
+                <div key={category.id} className="category-card" style={{ borderTopColor: category.color }}>
+                  <div className="category-icon" style={{ backgroundColor: category.color }}>
+                    <IconComponent size={32} color="white" />
+                  </div>
+                  <h3>{category.name}</h3>
+                  <p className="category-code">Kode: {category.id}</p>
+                  <button className="take-queue-btn" onClick={() => takeQueue(category.id)} disabled={isLoading} style={{ "--accent-color": category.color } as any}>
+                    {isLoading ? (
+                      <>
+                        <Clock size={16} /> Memproses...
+                      </>
+                    ) : (
+                      <>
+                        <FileText size={16} /> Ambil Antrian
+                      </>
+                    )}
+                  </button>
                 </div>
-                <h3>{category.name}</h3>
-                <p className="category-code">Kode: {category.id}</p>
-                <button className="take-queue-btn" onClick={() => takeQueue(category.id)} disabled={isLoading} style={{ "--accent-color": category.color } as any}>
-                  {isLoading ? "⏳ Memproses..." : "📋 Ambil Antrian"}
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
         {/* My Tickets Section */}
         {myTickets.length > 0 && (
           <section className="my-tickets-section">
-            <h2>Antrian Saya</h2>
+            <h2>
+              <FileText size={20} /> Antrian Saya
+            </h2>
             <div className="tickets-list">
               {myTickets.map((ticket, index) => (
                 <div key={index} className="ticket-item">
@@ -148,7 +169,7 @@ const QueueService: React.FC = () => {
                   </div>
                   <div className="ticket-actions">
                     <button className="print-ticket-btn" onClick={() => openPrinterModal(index)} title="Cetak tiket">
-                      🖨️
+                      <Printer size={16} />
                     </button>
                     <button className="cancel-btn" onClick={() => cancelTicket(index)} title="Batalkan antrian">
                       ✕
@@ -163,7 +184,9 @@ const QueueService: React.FC = () => {
         {/* Empty State */}
         {myTickets.length === 0 && (
           <div className="empty-state">
-            <div className="empty-icon">📭</div>
+            <div className="empty-icon">
+              <QrCode size={48} strokeWidth={1} />
+            </div>
             <p>Anda belum mengambil antrian</p>
             <p className="empty-subtitle">Pilih kategori layanan di atas untuk mengambil antrian</p>
           </div>

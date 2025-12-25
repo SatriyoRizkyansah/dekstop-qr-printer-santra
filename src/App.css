@@ -16,7 +16,7 @@
 
 .app-header {
   background: white;
-  padding: 16px 24px;
+  padding: 12px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -29,11 +29,14 @@
 }
 
 .app-header h1 {
-  font-size: 20px;
+  font-size: 18px;
   color: #1f2937;
   margin: 0;
   font-weight: 600;
   letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .app-nav {
@@ -44,15 +47,18 @@
 }
 
 .nav-btn {
-  padding: 8px 16px;
+  padding: 6px 12px;
   background: transparent;
   color: #6b7280;
   border: 1px solid transparent;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .nav-btn:hover {
@@ -75,27 +81,30 @@
 }
 
 .user-name {
-  font-size: 14px;
+  font-size: 13px;
   color: #1f2937;
   font-weight: 500;
-  padding: 6px 12px;
+  padding: 4px 10px;
   background: #f3f4f6;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
-  min-width: 100px;
+  min-width: 80px;
   text-align: center;
 }
 
 .logout-button {
-  padding: 8px 16px;
+  padding: 6px 12px;
   background: #ef4444;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .logout-button:hover {
