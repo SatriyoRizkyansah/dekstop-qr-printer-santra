@@ -1,7 +1,7 @@
 .queue-service-container {
   min-height: 100%;
   background: #f8f9fa;
-  padding: 24px;
+  padding: 24px 40px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -29,9 +29,8 @@
 
 .queue-content {
   flex: 1;
-  max-width: 1400px;
-  margin: 0 auto;
   width: 100%;
+  margin: 0;
 }
 
 .message {
@@ -40,9 +39,9 @@
   margin-bottom: 16px;
   font-weight: 500;
   font-size: 14px;
-  max-width: 1400px;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .message.success {
