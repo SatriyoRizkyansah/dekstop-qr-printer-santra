@@ -24,6 +24,8 @@ pub fn list_connected_printers() -> io::Result<Vec<Printer>> {
         // Use PowerShell to get Windows printers
         let output = Command::new("powershell")
             .args(&[
+                "-WindowStyle",
+                "Hidden",
                 "-Command",
                 "Get-Printer | Select-Object Name,DriverName,PortName,PrinterStatus | ConvertTo-Json"
             ])
@@ -156,10 +158,12 @@ pub fn check_printer_status(printer_name: &str) -> io::Result<String> {
     {
         let output = Command::new("powershell")
             .args(&[
+                "-WindowStyle",
+                "Hidden",
                 "-Command",
                 &format!("(Get-Printer -Name '{}').PrinterStatus", printer_name)
-            ]creation_flags(0x08000000) // CREATE_NO_WINDOW flag
-            .)
+            ])
+            .creation_flags(0x08000000) // CREATE_NO_WINDOW flag
             .output()?;
 
         if output.status.success() {

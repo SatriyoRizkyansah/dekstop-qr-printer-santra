@@ -13,7 +13,7 @@ pub fn generate_qr_code(data: &str, _size: u32) -> Result<String, Box<dyn std::e
 }
 
 pub fn generate_qr_svg(data: &str) -> Result<String, Box<dyn std::error::Error>> {
-    let code = QrCode::new(data)?;
+    QrCode::new(data)?;
     
     // For now, just return the data
     // The actual QR rendering will be done by the frontend using QR server API

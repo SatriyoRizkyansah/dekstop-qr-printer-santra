@@ -1,10 +1,31 @@
 // This file contains functions to handle thermal receipt printing
 
-use std::process::Command;
-use std::io::{self, Write};
 use std::fs::File;
+use std::io::{self, Write};
+
+#[cfg(not(target_os = "windows"))]
+use std::process::Command;
+
 use serde::{Deserialize, Serialize};
 use chrono::Local;
+
+#[cfg(target_os = "windows")]
+use std::{
+    ffi::{c_void, OsStr},
+    os::windows::ffi::OsStrExt,
+};
+
+#[cfg(target_os = "windows")]
+use windows::{
+    core::{PCWSTR, PWSTR},
+    Win32::{
+        Foundation::HANDLE,
+        Graphics::Printing::{
+            ClosePrinter, DOC_INFO_1W, EndDocPrinter, EndPagePrinter, OpenPrinterW,
+            StartDocPrinterW, StartPagePrinter, WritePrinter,
+        },
+    },
+};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct TicketData {
@@ -98,17 +119,13 @@ pub fn print_thermal_ticket(printer_name: &str, ticket: &TicketData) -> io::Resu
         // Generate receipt content
         let receipt = generate_thermal_receipt(ticket)
             .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
-        
-        // Save receipt to temp file
-        let temp_dir = std::env::temp_dir();
-        let receipt_path = temp_dir.join("temp_receipt.txt");
-        let mut file = File::create(&receipt_path)?;
-        file.write_all(receipt.as_bytes())?;
-        
-        // For now, just indicate success
-        // In production, you would send this to the actual printer
-        // using Windows printing API or thermal printer ESC/POS commands
-        
+
+        // Keep a temp copy for troubleshooting but never fail the job if this falls over
+        let _ = persist_receipt_copy(&receipt);
+
+        // Push the ESC/POS payload straight to the Windows print spooler as RAW data
+        send_raw_to_printer(printer_name, receipt.as_bytes())?;
+
         Ok(format!("Tiket {} berhasil dicetak ke {}", ticket.ticket_number, printer_name))
     }
     
@@ -138,6 +155,93 @@ pub fn print_thermal_ticket(printer_name: &str, ticket: &TicketData) -> io::Resu
             ))
         }
     }
+}
+
+#[cfg(target_os = "windows")]
+fn persist_receipt_copy(content: &str) -> io::Result<()> {
+    let path = std::env::temp_dir().join("temp_receipt.txt");
+    let mut file = File::create(path)?;
+    file.write_all(content.as_bytes())
+}
+
+#[cfg(target_os = "windows")]
+struct PrinterHandle(HANDLE);
+
+#[cfg(target_os = "windows")]
+impl Drop for PrinterHandle {
+    fn drop(&mut self) {
+        unsafe {
+            if self.0 != HANDLE::default() {
+                ClosePrinter(self.0);
+            }
+        }
+    }
+}
+
+#[cfg(target_os = "windows")]
+fn to_wide_null(value: &str) -> Vec<u16> {
+    OsStr::new(value)
+        .encode_wide()
+        .chain(std::iter::once(0))
+        .collect()
+}
+
+#[cfg(target_os = "windows")]
+fn send_raw_to_printer(printer_name: &str, data: &[u8]) -> io::Result<()> {
+    let printer_wide = to_wide_null(printer_name);
+    let mut handle = HANDLE::default();
+
+    unsafe {
+        OpenPrinterW(PCWSTR(printer_wide.as_ptr()), &mut handle, None)
+            .map_err(|err| io::Error::new(io::ErrorKind::Other, err.to_string()))?;
+    }
+
+    let handle_guard = PrinterHandle(handle);
+    let doc_name = to_wide_null("QR Ticket");
+    let data_type = to_wide_null("RAW");
+
+    let doc_info = DOC_INFO_1W {
+        pDocName: PWSTR(doc_name.as_ptr() as *mut _),
+        pOutputFile: PWSTR::null(),
+        pDatatype: PWSTR(data_type.as_ptr() as *mut _),
+    };
+
+    unsafe {
+        if StartDocPrinterW(handle_guard.0, 1, &doc_info) == 0 {
+            return Err(io::Error::last_os_error());
+        }
+
+        if !StartPagePrinter(handle_guard.0).as_bool() {
+            EndDocPrinter(handle_guard.0);
+            return Err(io::Error::last_os_error());
+        }
+
+        let mut bytes_written = 0u32;
+        let write_ok = WritePrinter(
+            handle_guard.0,
+            data.as_ptr() as *const c_void,
+            data.len() as u32,
+            &mut bytes_written,
+        )
+        .as_bool();
+
+        if !write_ok || bytes_written != data.len() as u32 {
+            EndPagePrinter(handle_guard.0);
+            EndDocPrinter(handle_guard.0);
+            return Err(io::Error::last_os_error());
+        }
+
+        if !EndPagePrinter(handle_guard.0).as_bool() {
+            EndDocPrinter(handle_guard.0);
+            return Err(io::Error::last_os_error());
+        }
+
+        if !EndDocPrinter(handle_guard.0).as_bool() {
+            return Err(io::Error::last_os_error());
+        }
+    }
+
+    Ok(())
 }
 
 pub fn print_test_ticket(printer_name: &str) -> io::Result<String> {
